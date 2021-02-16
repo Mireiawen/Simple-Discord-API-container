@@ -1,0 +1,20 @@
+{
+	"name": "mireiawen/ostoslista-discord-api",
+	"description": "Ostoslista Discord API",
+	
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mireiawen Rose",
+			"email": "mir@mireiawen.net"
+		}
+	],
+	"require": {
+		"php": "^8.0",
+		"ext-json": "*",
+		"mireiawen/curl": "^0.1.0"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master"
+	}
+}
