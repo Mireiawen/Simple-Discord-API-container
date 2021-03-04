@@ -1,0 +1,28 @@
+---
+## /* vim: set tabstop=2 softtabstop=2 shiftwidth=2 expandtab smarttab autoindent: */
+
+version: '3.7'
+
+services:
+  ostoslista-api:
+    image: 'mireiawen/ostoslista-webhook'
+    build:
+      context: '.'
+    restart: 'always'
+    network_mode: 'bridge'
+    hostname: 'ostoslista-api.$DOMAIN'
+    container_name: 'ostoslista-api'
+    environment:
+      DISCORD_HOOK: '$DISCORD_HOOK'
+    labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.ostoslista-api.rule=Host(`ostoslista-api.$DOMAIN`)'
+    - 'traefik.http.routers.ostoslista-api.entrypoints=web'
+    - 'traefik.http.routers.ostoslista-api.middlewares=http-to-https'
+    - 'traefik.http.routers.ostoslista-api.service=ostoslista-api'
+    - 'traefik.http.routers.ostoslista-api-secure.rule=Host(`ostoslista-api.$DOMAIN`)'
+    - 'traefik.http.routers.ostoslista-api-secure.entrypoints=websecure'
+    - 'traefik.http.routers.ostoslista-api-secure.service=ostoslista-api'
+    - 'traefik.http.middlewares.http-to-https.redirectscheme.scheme=https'
+    - 'traefik.http.middlewares.http-to-https.redirectscheme.permanent=true'
+    - 'traefik.http.services.ostoslista-api.loadbalancer.passhostheader=true'
