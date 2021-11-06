@@ -8,9 +8,9 @@ services:
     image: 'mireiawen/ostoslista-webhook'
     build:
       context: '.'
-    restart: 'always'
-    network_mode: 'bridge'
-    hostname: '$HOSTNAME.$DOMAIN'
+    restart: 'unless-stopped'
+    networks:
+    - 'traefik'
     container_name: 'ostoslista-api'
     environment:
       DISCORD_HOOK: '$DISCORD_HOOK'
@@ -18,11 +18,14 @@ services:
     - 'traefik.enable=true'
     - 'traefik.http.routers.ostoslista-api.rule=Host(`$HOSTNAME.$DOMAIN`)'
     - 'traefik.http.routers.ostoslista-api.entrypoints=web'
-    - 'traefik.http.routers.ostoslista-api.middlewares=ostoslista-api-whitelist,http-to-https'
+    - 'traefik.http.routers.ostoslista-api.middlewares=whitelist@file,http-to-https@file'
     - 'traefik.http.routers.ostoslista-api.service=ostoslista-api'
     - 'traefik.http.routers.ostoslista-api-secure.rule=Host(`$HOSTNAME.$DOMAIN`)'
     - 'traefik.http.routers.ostoslista-api-secure.entrypoints=websecure'
-    - 'traefik.routers.ostoslista-api-secure.middlewares=ostoslista-api-whitelist'
+    - 'traefik.routers.ostoslista-api-secure.middlewares=whitelist@file'
     - 'traefik.http.routers.ostoslista-api-secure.service=ostoslista-api'
-    - 'traefik.http.middlewares.ostoslista-api-whitelist.ipwhitelist.sourcerange=$NETWORKS'
     - 'traefik.http.services.ostoslista-api.loadbalancer.passhostheader=true'
+
+networks:
+  traefik:
+    external: true
