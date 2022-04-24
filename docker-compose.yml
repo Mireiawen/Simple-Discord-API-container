@@ -11,11 +11,11 @@ services:
     restart: 'unless-stopped'
     networks:
     - 'traefik'
-    container_name: 'ostoslista-api'
     environment:
       DISCORD_HOOK: '$DISCORD_HOOK'
     labels:
     - 'traefik.enable=true'
+    - 'traefik.docker.network=traefik'
     - 'traefik.http.routers.ostoslista-api.rule=Host(`$HOSTNAME.$DOMAIN`)'
     - 'traefik.http.routers.ostoslista-api.entrypoints=websecure'
     - 'traefik.http.routers.ostoslista-api.middlewares=$MIDDLEWARE'
